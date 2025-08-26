@@ -18,9 +18,15 @@ export const loginUser = async (data:{username:string ; password:string}) =>{
     return res.data
 }
 
-export const getProfile = async(token:string) =>{
-    const res = await api.get('/users/profile',{ headers: { Authorization: `Bearer ${token}` } })
-    return res.data;
+export const getProfile = async (token: string) => {
+  const res = await api.get('/users/profile', { headers: { Authorization: `Bearer ${token}` } });
+  const data = res.data;
+
+  if (data.profile_pic && !data.profile_pic.startsWith('http')) {
+    data.profile_pic = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}${data.profile_pic}`;
+  }
+
+  return data;
 }
 
 

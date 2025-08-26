@@ -67,18 +67,25 @@ def profile(request):
 @api.post("/profile/update", auth=JWTAuth())
 def update_profile(
     request,
-    data: ProfileUpdateIn = Form(...),
+    full_name: str = Form(None),
+    bio: str = Form(None),
+    country: str = Form(None),
+    mobile: str = Form(None),
     profile_pic: Optional[UploadedFile] = File(None),
 ):
-    """
-    Update profile with optional JSON fields and optional profile picture.
-    """
     user = request.user
     profile = getattr(user, "profile", None)
     if not profile:
         return {"error": "Profile not found"}
-    for field, value in data.dict(exclude_unset=True).items():
-        setattr(profile, field, value)
+
+    if full_name is not None:
+        profile.full_name = full_name
+    if bio is not None:
+        profile.bio = bio
+    if country is not None:
+        profile.country = country
+    if mobile is not None:
+        profile.mobile = mobile
     if profile_pic:
         profile.profile_pic.save(profile_pic.name, profile_pic, save=True)
 
