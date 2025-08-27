@@ -16,8 +16,8 @@ class Session(models.Model):
     resume = models.FileField(upload_to="resume/",null=True,blank=True)
     job_discription = models.TextField()
     category = models.CharField(max_length=50,choices=CATEGORY_CHOICES, default="Web Development"  )
-    num_questions = models.CharField(max_length=20)
-    result = models.CharField(max_length=50)
+    num_questions = models.IntegerField()
+    result = models.CharField(max_length=50, default="Pending")
 
     def __str__(self):
         return f'{self.user}-{self.session_name}'
@@ -26,10 +26,10 @@ class Session(models.Model):
         return sum(int(q.score) for q in self.questions_set.all())
     
 class Questions(models.Model):
-    session = models.ForeignKey(Session,on_delete=models.CASCADE)
+    session = models.ForeignKey(Session,on_delete=models.CASCADE,related_name="questions")
     quest = models.CharField(max_length=500)
     answer = models.CharField(max_length=500)
-    score = models.CharField(max_length=50)
+    score = models.IntegerField()
     
 
     def __str__(self):
