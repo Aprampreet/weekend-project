@@ -90,17 +90,13 @@ def update_profile(
         profile.profile_pic.save(profile_pic.name, profile_pic, save=True)
 
     profile.save()
-
-    return {
-        "message": "Profile updated successfully",
-        "profile": ProfileOut(
-            username=user.username,
-            email=user.email,
-            full_name=profile.full_name,
-            bio=profile.bio,
-            country=profile.country,
-            mobile=profile.mobile,
-            profile_pic=profile.profile_pic.url if profile.profile_pic else None,
-            created_at=profile.created_at
-        )
-    }
+    return ProfileOut(
+        username=user.username,
+        email=user.email,
+        full_name=profile.full_name,
+        bio=profile.bio,
+        country=profile.country,
+        mobile=profile.mobile,
+        profile_pic=profile.profile_pic.url if profile.profile_pic else None,
+        created_at=profile.created_at,
+    )

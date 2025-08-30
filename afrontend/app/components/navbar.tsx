@@ -24,7 +24,7 @@ export default function Navbar() {
           { href: "/login", label: "Login" },
           { href: "/register", label: "Register" },
         ]
-      : []),
+      : [{ href: "/dashboard", label: "Dashboard" }]),
   ];
 
   const accountLinks = [
@@ -45,12 +45,12 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
          <Link
-  href="/"
-className="text-3xl font-extrabold text-transparent bg-gradient-to-r bg-gradient-to-r from-purple-800 via-pink-600 to-fuchsia-700
- bg-clip-text drop-shadow-md"
->
-  ARZONA
-</Link>
+          href="/"
+        className="text-3xl font-extrabold text-transparent bg-gradient-to-r bg-gradient-to-r from-purple-800 via-pink-600 to-fuchsia-700
+        bg-clip-text drop-shadow-md"
+        >
+          ARZONA
+        </Link>
 
 
 

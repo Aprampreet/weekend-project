@@ -30,7 +30,6 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
-    // Load countries
     fetch("https://restcountries.com/v3.1/all?fields=name,cca2")
       .then(res => res.json())
       .then(data => {
@@ -77,31 +76,36 @@ export default function ProfilePage() {
   }
 }
 
-  const handleSave = async () => {
-      const token = localStorage.getItem("access_token");
-      if (!token) return;
+ const handleSave = async () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) return;
 
-      try {
-        const dataToUpdate = {
-          full_name: form.full_name,
-          bio: form.bio,
-          country: form.country,
-          mobile: form.mobile,
-        }
+  try {
+    const dataToUpdate = {
+      full_name: form.full_name,
+      bio: form.bio,
+      country: form.country,
+      mobile: form.mobile,
+    };
 
-        const updated = await updateProfile(token, dataToUpdate, form.profile_pic || undefined);
+    const updated = await updateProfile(token, dataToUpdate, form.profile_pic || undefined);
 
-        if (updated.profile.profile_pic && !updated.profile.profile_pic.startsWith('http')) {
-          updated.profile.profile_pic = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}${updated.profile.profile_pic}`;
-        }
+    const updatedProfile = updated?.profile;
 
-        setUser(updated.profile);
-        setPreview(null); 
-        setIsEditing(false);
-      } catch (err) {
-        console.error("Failed to update profile", err);
-      }
+    if (updatedProfile?.profile_pic && !updatedProfile.profile_pic.startsWith("http")) {
+      updatedProfile.profile_pic = `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"}${updatedProfile.profile_pic}`;
     }
+
+    if (updatedProfile) {
+      setUser(updatedProfile);
+    }
+
+    setPreview(null);
+    setIsEditing(false);
+  } catch (err) {
+    console.error("Failed to update profile", err);
+  }
+};
 
 
   if (!user)

@@ -42,3 +42,20 @@ export const updateProfile = async (token:string , data: { full_name?: string; b
     return res.data;
 
 }
+
+export const getDashboard = async (token:string)=>{
+    const res = await api.get('/interviews/dashboard',{
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+}
+
+export const createSession = async (token: string, formData: FormData) => {
+  const res = await api.post("interviews/create-session", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

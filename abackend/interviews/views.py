@@ -5,11 +5,25 @@ from .schemas import *
 from ninja.files import UploadedFile
 from .models import Session
 api = NinjaAPI(urls_namespace="interviews_api")
+from typing import List
 
-@api.get("/dashboard", auth=JWTAuth())
+
+@api.get("/dashboard", response=List[SessionOut], auth=JWTAuth())
 def dashboard(request):
     user = request.user
-    return {"message": f"Hello {user.username}, your dashboard here"}
+    sessions = Session.objects.filter(user=user).order_by("-id")
+    return [
+        {
+            "id": s.id,
+            "session_name": s.session_name,
+            "job_discription": s.job_discription,
+            "category": s.category,
+            "num_questions": s.num_questions,
+            "result": s.result,
+            "resume": s.resume.url if s.resume else None,
+        }
+        for s in sessions
+    ]
 
 
 
