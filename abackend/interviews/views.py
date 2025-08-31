@@ -45,5 +45,6 @@ def create_session(
         result="Pending",
         resume=resume if resume else None
     )
+
     return session
 

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getDashboard } from "@/lib/api";
 import { Search, Plus } from "lucide-react";
-
 export default function Dashboard() {
   const router = useRouter();
   const [sessions, setSessions] = useState<any[]>([]);
@@ -37,7 +36,7 @@ export default function Dashboard() {
             />
           </div>
 
-          <Button className="bg-white text-black hover:bg-gray-200 flex items-center gap-2 rounded-full px-5 py-2 font-medium">
+          <Button onClick={()=>router.push("/create-session")} className="bg-white text-black hover:bg-gray-200 flex items-center gap-2 rounded-full px-5 py-2 font-medium">
             <Plus className="w-5 h-5" /> New Session
           </Button>
         </div>

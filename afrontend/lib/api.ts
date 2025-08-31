@@ -51,11 +51,11 @@ export const getDashboard = async (token:string)=>{
 }
 
 export const createSession = async (token: string, formData: FormData) => {
-  const res = await api.post("interviews/create-session", formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data", 
+  };
+
+  const res = await api.post("/interviews/create-session", formData, { headers });
   return res.data;
 };
