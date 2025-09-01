@@ -30,7 +30,7 @@ export default function CreateSessionForm() {
   const onSubmit = async (data: FormValues) => {
     setMessage("");
     if (!token) {
-      setMessage("⚠️ You must be logged in to create a session");
+      setMessage("You must be logged in to create a session");
       return;
     }
 

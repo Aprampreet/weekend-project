@@ -10,3 +10,14 @@ class SessionOut(Schema):
     num_questions: int
     result: str
     resume: str | None = None
+
+
+class AnswerIn(Schema):
+    answer: str
+
+class AnswerOut(Schema):
+    id: int
+    quest: str
+    answer: str
+    feedback: str
+    score: int | None

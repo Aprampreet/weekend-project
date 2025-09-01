@@ -59,3 +59,17 @@ export const createSession = async (token: string, formData: FormData) => {
   const res = await api.post("/interviews/create-session", formData, { headers });
   return res.data;
 };
+
+export const getQuestions = async (token:string ,sessionId: number) =>{
+  const res =await api.get(`${BASE_URL}/interviews/questions/${sessionId}`,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export const SubmitAnswer = async (token:string , questionId:number , answer:string)=>{
+  const res = await api.post(`${BASE_URL}/interviews/${questionId}/answer`,{ answer },{
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  return res.data
+}

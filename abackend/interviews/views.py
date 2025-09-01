@@ -4,8 +4,12 @@ from users.Auth import JWTAuth
 from .schemas import *
 from ninja.files import UploadedFile
 from .models import Session
-api = NinjaAPI(urls_namespace="interviews_api")
 from typing import List
+from .utlis import *
+from django.shortcuts import get_object_or_404
+
+
+api = NinjaAPI(urls_namespace="interviews_api")
 
 
 @api.get("/dashboard", response=List[SessionOut], auth=JWTAuth())
@@ -45,6 +49,46 @@ def create_session(
         result="Pending",
         resume=resume if resume else None
     )
+    questions = generate_questions(session)
+
+    for q in questions:
+        Questions.objects.create(session=session,quest=q)
+
+
 
     return session
 
+@api.get('/questions/{session_id}',auth=JWTAuth())
+def question(request,session_id:int):
+    session = get_object_or_404(Session, id=session_id, user=request.user)
+    questions = Questions.objects.filter(session=session).values_list("quest", flat=True)
+    return {
+        "session_id": session.id,
+        "questions": list(questions)
+    }
+
+
+@api.post('/questions/{question_id}/answer',auth=JWTAuth())
+def put_answer(request, question_id: int, data: AnswerIn):
+    question = get_object_or_404(Questions,id=question_id,session__user=request.user)
+    question.answer= data.answer
+
+    x = get_feedback_and_score(question.quest, data.answer)
+    question.feedback = x["feedback"]
+    question.score = x["score"]
+
+    question.save()
+
+    session = question.session
+    total_score = session.questions.aggregate(total=Sum('score'))['total'] or 0
+    session.result = f"{total_score} / {session.num_questions * 10}"
+    session.save()
+
+    return {
+        "id": question.id,
+        "quest": question.quest,
+        "answer": question.answer,
+        "feedback": question.feedback,
+        "score": question.score,
+        "session_result": session.result
+    }

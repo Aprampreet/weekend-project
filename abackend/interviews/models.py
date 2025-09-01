@@ -23,15 +23,16 @@ class Session(models.Model):
         return f'{self.user}-{self.session_name}'
     
     def total_score(self):
-        return sum(int(q.score) for q in self.questions_set.all())
+        return sum(q.score or 0 for q in self.questions.all())
+
     
 class Questions(models.Model):
-    session = models.ForeignKey(Session,on_delete=models.CASCADE,related_name="questions")
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name="questions")
     quest = models.CharField(max_length=500)
-    answer = models.CharField(max_length=500, blank=True, null=True)
-    feedback=models.CharField(max_length=700,default='')
+    answer = models.TextField(blank=True, null=True)   
+    feedback = models.TextField(default='', blank=True)
     score = models.IntegerField(blank=True, null=True)
-    
+
     def __str__(self):
-        return f'{self.session}-{self.quest[:10]}'
+        return f'{self.session} - {self.quest[:50]}'
     
