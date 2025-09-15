@@ -70,11 +70,13 @@ export default function Dashboard() {
             </span>
             <div className="flex justify-end">
               <Button
-                variant="outline"
-                className="border-white/20 text-gray-300 hover:text-white hover:border-white/40 rounded-full px-4 py-1 text-sm"
-              >
-                Details
-              </Button>
+              onClick={() => router.push(`/interview/${session.id}`)}
+              variant="outline"
+              className="border-white/20 text-gray-300 hover:text-white hover:border-white/40 rounded-full px-4 py-1 text-sm"
+            >
+              Details
+            </Button>
+
             </div>
           </div>
         ))}

@@ -35,7 +35,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-black">
   <form 
     onSubmit={handleSubmit(onSubmit)} 
-    className="relative w-full max-w-md p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl flex flex-col gap-6"
+    className="relative w-full max-w-md p-8  backdrop-blur-md border border-white/20 rounded-2xl shadow-xl flex flex-col gap-6"
   >
     <div className="text-center">
       <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-lg">
