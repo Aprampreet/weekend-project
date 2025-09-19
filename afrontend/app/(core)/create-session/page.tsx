@@ -85,24 +85,21 @@ export default function CreateSessionForm() {
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <div>
-  <label className="block mb-1 font-medium text-sm">Category</label>
-  <select
-    className="w-full border rounded p-2 bg-zinc-900 text-white"
-    {...register("category", { required: "Category is required" })}
-  >
-    <option value="">Select category</option>
-    <option value="Web Development">Web Development</option>
-    <option value="Data Science">Data Science</option>
-    <option value="Mobile Development">Mobile Development</option>
-    <option value="AI/ML">AI/ML</option>
-  </select>
-  {errors.category && (
-    <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
-  )}
-</div>
+        <select
+          className="w-full border rounded p-2 bg-zinc-900 text-white"
+          {...register("category", { required: "Category is required" })}
+        >
+          <option value="">Select category</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Mobile Development">Mobile Development</option>
+          <option value="AI/ML">AI/ML</option>
+        </select>
+        {errors.category && (
+          <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+        )}
+      </div>
 
-          <input type="hidden" id="category-hidden" {...register("category", { required: true })} />
-          {errors.category && <p className="text-red-400 text-sm">Category is required</p>}
         </div>
 
         {/* Number of Questions */}

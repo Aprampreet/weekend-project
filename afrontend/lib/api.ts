@@ -68,8 +68,15 @@ export const getQuestions = async (token:string ,sessionId: number) =>{
 }
 
 export const SubmitAnswer = async (token:string , questionId:number , answer:string)=>{
-  const res = await api.post(`${BASE_URL}/interviews/${questionId}/answer`,{ answer },{
+  const res = await api.post(`${BASE_URL}/interviews/questions/${questionId}/answer`,{ answer },{
     headers: { Authorization: `Bearer ${token}` },
   })
   return res.data
+}
+
+export const Score = async (token:string , sessionId:number)=>{
+  const res = await api.get(`${BASE_URL}/interviews/session/${sessionId}/score`,{
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  return res.data;
 }

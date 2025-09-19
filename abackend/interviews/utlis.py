@@ -28,6 +28,7 @@ def generate_questions(session):
         Goal
         - Create exactly {session.num_questions} interview questions for a {session.category} role, tailored to the job description and the candidate’s resume.
         - Order STRICTLY from easiest to hardest (early = fundamentals, middle = applied/scenario, last = advanced/architecture/trade-offs).
+        - Order STRICTLY from miedum length to Lengthy .
 
         Context
         Job Description (verbatim):

@@ -1,5 +1,4 @@
-from ninja import NinjaAPI,File,Form
-from ninja.security import django_auth
+from ninja import NinjaAPI,Form,File
 from users.Auth import JWTAuth
 from .schemas import *
 from ninja.files import UploadedFile
@@ -7,7 +6,8 @@ from .models import Session
 from typing import List
 from .utlis import *
 from django.shortcuts import get_object_or_404
-
+from django.core.files.base import ContentFile
+from django.db.models import Sum
 
 api = NinjaAPI(urls_namespace="interviews_api")
 
@@ -47,21 +47,19 @@ def create_session(
         category=category,
         num_questions=num_questions,
         result="Pending",
-        resume=resume if resume else None
+        resume=resume  
     )
     questions = generate_questions(session)
 
     for q in questions:
-        Questions.objects.create(session=session,quest=q)
-
-
-
+        Questions.objects.create(session=session, quest=q)
     return session
+
 
 @api.get('/questions/{session_id}',auth=JWTAuth())
 def question(request,session_id:int):
     session = get_object_or_404(Session, id=session_id, user=request.user)
-    questions = Questions.objects.filter(session=session).values_list("quest", flat=True)
+    questions = Questions.objects.filter(session=session).values("id", "quest")
     return {
         "session_id": session.id,
         "questions": list(questions)
@@ -91,4 +89,19 @@ def put_answer(request, question_id: int, data: AnswerIn):
         "feedback": question.feedback,
         "score": question.score,
         "session_result": session.result
+    }
+
+@api.get('/session/{session_id}/score',auth=JWTAuth())
+def get_score(request,session_id:int):
+    session = get_object_or_404(Session, id=session_id, user=request.user)
+    total_score = session.total_score()
+    max_score = session.num_questions*10
+    session.result = f"{total_score} / {max_score}"
+    session.save()
+
+    return {
+        "session_id": session.id,
+        "total_score": total_score,
+        "max_score": max_score,
+        "result": session.result,
     }
