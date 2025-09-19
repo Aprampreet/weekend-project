@@ -80,3 +80,10 @@ export const Score = async (token:string , sessionId:number)=>{
   })
   return res.data;
 }
+
+export const dashboard_session = async (token:string , sessionId:number)=>{
+  const res = await api.get(`${BASE_URL}/interviews/sessions/${sessionId}/dashboard`,{
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  return res.data;
+}

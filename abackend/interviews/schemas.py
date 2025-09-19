@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from ninja import Schema
+from typing import List
 
 
 class SessionOut(Schema):
@@ -21,3 +22,21 @@ class AnswerOut(Schema):
     answer: str
     feedback: str
     score: int | None
+
+class QuestionScoreOut(Schema):
+    id: int
+    text: str
+    score: int
+    max_score: int
+    feedback:str
+
+
+class SessionDashboardOut(Schema):
+    session_id: int
+    total_score: int
+    max_score: int
+    correct_answers: int
+    incorrect_answers: int
+    questions: List[QuestionScoreOut]
+
+

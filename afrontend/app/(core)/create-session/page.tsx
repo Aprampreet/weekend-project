@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   session_name: string;
@@ -21,6 +23,8 @@ export default function CreateSessionForm() {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
   const [message, setMessage] = useState("");
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
+
 
   useEffect(() => {
     const t = localStorage.getItem("access_token")?.trim();
@@ -42,8 +46,10 @@ export default function CreateSessionForm() {
       formData.append("num_questions", data.num_questions.toString());
       if (data.resume?.[0]) formData.append("resume", data.resume[0]);
 
-      await createSession(token, formData);
+      const d= await createSession(token, formData);
       setMessage(" Session created successfully!");
+      router.push(`/interview/${d.id}`);
+
       reset();
     } catch (err) {
       console.error(err);

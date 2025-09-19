@@ -105,3 +105,35 @@ def get_score(request,session_id:int):
         "max_score": max_score,
         "result": session.result,
     }
+
+
+@api.get("/sessions/{session_id}/dashboard", response=SessionDashboardOut, auth=JWTAuth())
+def session_dashboard(request, session_id: int):
+    session = get_object_or_404(Session, id=session_id, user=request.user)
+    
+    total_score = session.total_score()
+    max_score = session.num_questions * 10
+
+    correct_answers = session.questions.filter(score__gte =5).count()
+    incorrect_answers = session.questions.exclude(score=10).count()
+
+    questions_data = []
+    for q in session.questions.all():
+        questions_data.append(
+            QuestionScoreOut(
+                id=q.id,
+                text=q.quest,
+                score=q.score or 0,
+                max_score=10,
+                feedback=q.feedback 
+            )
+        )
+
+    return SessionDashboardOut(
+        session_id=session.id,
+        total_score=total_score,
+        max_score=max_score,
+        correct_answers=correct_answers,
+        incorrect_answers=incorrect_answers,
+        questions=questions_data,
+    )
