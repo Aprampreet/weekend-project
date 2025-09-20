@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Drawer,
   DrawerClose,
@@ -12,7 +13,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "@/components/ui/drawer"
 import {
   Card,
   CardHeader,
@@ -35,12 +36,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+
 import { dashboard_session } from "@/lib/api";
 
 const COLORS = ["#16a34a", "#dc2626"];
 
 export default function SessionDashboard() {
-  const router = useRouter();
+    const router = useRouter();
+    
   const { sessionId } = useParams();
   const sessionID = parseInt(sessionId as string);
 
@@ -53,45 +56,41 @@ export default function SessionDashboard() {
         const res = await dashboard_session(token, sessionID);
         setData(res);
       } catch (e) {
-        console.error(e);
+        console.log(e);
       }
     };
     fetchDashboard();
   }, [sessionID]);
 
-  if (!data) return <p className="text-center text-white mt-20">Loading...</p>;
+  if (!data) return <p className="text-center text-white">Loading...</p>;
 
   const percentage = Math.round((data.total_score / data.max_score) * 100);
+
   const pieData = [
     { name: "Correct", value: data.correct_answers },
     { name: "Incorrect", value: data.incorrect_answers },
   ];
 
   return (
-    <div className="min-h-screen p-8 mt-10 md:p-12 bg-black text-white space-y-10">
-      <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl transition hover:shadow-2xl">
-        <CardHeader className="flex flex-col md:flex-row md:justify-between md:items-center">
-          <CardTitle className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+    <div className="min-h-screen mt-12 p-10 bg-black text-white space-y-8">
+      {/* Score Summary */}
+      <Card className="shadow-lg border border-white/10 bg-white/5 backdrop-blur-xl">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold tracking-tight text-white">
             Session #{data.session_id}
           </CardTitle>
-          <Button
-            onClick={() => router.push(`/interview/${sessionID}`)}
-            className="bg-gradient-to-r from-fuchsia-600 via-pink-500 to-orange-400 hover:scale-105 transform transition rounded-full px-6 py-2 font-semibold mt-4 md:mt-0"
-          >
-            Practice Questions
-          </Button>
         </CardHeader>
-        <CardContent className="mt-4">
-          <p className="text-lg font-medium text-white/90">
-            Total Score:{" "}
-            <span className="text-emerald-400 font-extrabold text-xl">
+        <CardContent>
+          <p className="text-lg font-medium text-white">
+            Score:{" "}
+            <span className="font-extrabold text-emerald-400">
               {data.total_score}
             </span>{" "}
             / {data.max_score}
           </p>
           <Progress
             value={percentage}
-            className="mt-3 h-4 rounded-xl bg-white/10"
+            className="mt-3 h-3 bg-white/10"
           />
           <p className="text-sm text-zinc-400 mt-2">{percentage}% achieved</p>
         </CardContent>
@@ -100,13 +99,13 @@ export default function SessionDashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Pie Chart */}
-        <Card className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-2xl transition">
+        <Card className="p-6 shadow-lg border border-white/10 bg-white/5 backdrop-blur-xl">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-white">
               Answer Accuracy
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center">
+          <CardContent className="flex justify-center text-white">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -115,7 +114,7 @@ export default function SessionDashboard() {
                   cy="50%"
                   outerRadius={100}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label
                 >
                   {pieData.map((entry, index) => (
                     <Cell
@@ -126,9 +125,9 @@ export default function SessionDashboard() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    color: 'white',
-                    backgroundColor: "rgba(30,30,30,0.9)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    color:'white',
+                    backgroundColor: "rgba(220, 220, 220, 0.9)",
+                    border: "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: "8px",
                   }}
                 />
@@ -139,7 +138,7 @@ export default function SessionDashboard() {
         </Card>
 
         {/* Bar Chart */}
-        <Card className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-2xl transition">
+        <Card className="p-6 shadow-lg border border-white/10 bg-white/5 backdrop-blur-xl">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-white">
               Score per Question
@@ -153,7 +152,7 @@ export default function SessionDashboard() {
                 <YAxis stroke="white" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "rgba(20,20,20,0.95)",
+                    backgroundColor: "rgba(20,20,20,0.9)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: "8px",
                   }}
@@ -165,66 +164,45 @@ export default function SessionDashboard() {
         </Card>
       </div>
 
-      {/* Question List / Drawer */}
-      <Card className="p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl transition hover:shadow-2xl">
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle className="text-xl font-semibold text-white">
-            Question Breakdown
-          </CardTitle>
-          <Button
-            onClick={() => router.push(`/interview/${sessionID}`)}
-            variant="outline"
-            className="border-white/20 text-gray-300 hover:text-white hover:border-white/40 rounded-full px-4 py-1 text-sm"
-          >
-            Start Practice
-          </Button>
-        </CardHeader>
+      {/* Questions List */}
+      <Card className="p-6 shadow-lg border border-white/10 bg-white/5 backdrop-blur-xl">
+        <CardHeader className="flex items-center justify-between">
+            <CardTitle className="text-xl font-semibold text-white">
+                Question Breakdown
+            </CardTitle>
+            <Button
+                onClick={() => router.push(`/interview/${sessionID}`)}
+                variant="outline"
+                className="border-white/20 text-gray-300 hover:text-white hover:border-white/40 rounded-full px-4 py-1 text-sm"
+            >
+                Practice Questions
+            </Button>
+            </CardHeader>
+
         <CardContent>
-          <ul className="space-y-4">
+          <ul className="space-y-3">
             {data.questions.map((q: any) => (
-              <li
-                key={q.id}
-                className="bg-zinc-900/50 backdrop-blur-md rounded-xl shadow-md border border-zinc-700 overflow-hidden hover:scale-[1.02] transform transition"
-              >
-                <Drawer>
-                  <DrawerTrigger asChild>
-                    <button className="w-full text-left px-4 py-3 text-white font-medium hover:bg-zinc-800/60 transition-colors rounded-t-xl flex justify-between items-center">
-                      {q.text}
-                      <span
-                        className={`px-2 py-0.5 text-xs rounded-full font-semibold ${
-                          q.score >= 5
-                            ? "bg-emerald-600 text-black"
-                            : "bg-red-600 text-white"
-                        }`}
-                      >
-                        {q.score} / {q.max_score}
-                      </span>
-                    </button>
-                  </DrawerTrigger>
-                  <DrawerContent className="bg-zinc-900/90 text-white backdrop-blur-md p-6">
-                    <DrawerHeader>
-                      <DrawerTitle className="text-xl font-bold">{q.text}</DrawerTitle>
-                      <DrawerDescription className="mt-2 text-zinc-300">
-                        {q.feedback || "No feedback yet"}
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter className="mt-4">
-                      <DrawerClose asChild>
-                        <Button
-                          variant="outline"
-                          className="text-white border-zinc-600 hover:bg-zinc-800/60"
-                        >
-                          Close
-                        </Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </Drawer>
-              </li>
+
+              <Drawer key={q.id}>
+              <DrawerTrigger>{q.text}</DrawerTrigger>
+              <DrawerContent className="text-white">
+                <DrawerHeader>
+                  <DrawerTitle className="text-white">{q.text}</DrawerTitle>
+                  <DrawerDescription className="text-white">{q.feedback}</DrawerDescription>
+                </DrawerHeader>
+                <DrawerFooter>
+                  <DrawerClose>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+           
             ))}
           </ul>
         </CardContent>
       </Card>
+      
     </div>
   );
 }

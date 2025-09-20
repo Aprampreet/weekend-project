@@ -28,7 +28,6 @@ class QuestionScoreOut(Schema):
     text: str
     score: int
     max_score: int
-    feedback:str
 
 
 class SessionDashboardOut(Schema):

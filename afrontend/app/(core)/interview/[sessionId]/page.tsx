@@ -94,9 +94,9 @@ useEffect(() => {
 
 
   return (
-  <div className="h-screen mt-15 flex flex-col bg-black text-white">
-  <header className=" flex items-center justify-between px-8 py-4 backdrop-blur-md bg-black/90 border-b border-zinc-800 shadow-md">
-    <h1 className="text-xl md:text-2xl font-bold tracking-wide">
+   <div className="h-screen flex flex-col bg-black text-white mt-16">
+  <header className="  flex items-center justify-between px-8 py-5  backdrop-blur-md">
+    <h1 className="text-xl font-bold tracking-wide">
       Question {index + 1} of {questions.length}
     </h1>
     <span className="px-4 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-fuchsia-500 to-pink-500 shadow-lg">
@@ -104,46 +104,46 @@ useEffect(() => {
     </span>
   </header>
 
-  <main className="flex-1 overflow-y-auto pt-28 pb-40 px-6 md:px-10 flex items-start justify-center">
+  <main className="flex-1 overflow-y-auto px-10 pt-28 pb-40 flex items-start justify-center">
     <div className="max-w-4xl text-center">
-      <p className="text-2xl md:text-3xl font-semibold leading-relaxed text-white/90">
+      <p className="text-2xl font-semibold leading-relaxed">
         {questions[index]?.quest || "⚡ Loading question..."}
       </p>
     </div>
   </main>
 
-  <footer className="fixed bottom-0 left-0 right-0 z-50 p-6 md:p-8 border-t border-zinc-800 bg-black/90 backdrop-blur-xl space-y-4">
-    <div className="relative">
-      <Textarea
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        placeholder="Type your brilliant answer here..."
-        className="w-full min-h-[140px] bg-zinc-900/60 border border-zinc-700 rounded-xl text-white p-4 resize-none focus:ring-2 focus:ring-fuchsia-500 focus:outline-none pr-12"
-      />
-      <button
-        onClick={handleReadQuestion}
-        className="absolute top-3 right-3 bg-neutral-600 hover:bg-neutral-500 text-white px-3 py-1 rounded-lg shadow-md text-sm"
-      >
-        🔊
-      </button>
-      {repeatAvailable && (
-        <button
-          onClick={handleRepeat}
-          className="absolute top-12 right-3 bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-md text-sm"
-        >
-          🔄
-        </button>
-      )}
-    </div>
+  <footer className="fixed bottom-0 left-0 right-0 z-50 p-8 border-t border-zinc-800 bg-black/80 backdrop-blur-xl space-y-6">
+    <Textarea
+      value={answer}
+      onChange={(e) => setAnswer(e.target.value)}
+      placeholder="Type your brilliant answer here..."
+      className="w-full min-h-[140px] bg-zinc-900/60 border border-zinc-700 rounded-xl text-white p-4 resize-none focus:ring-2 focus:ring-fuchsia-500 focus:outline-none"
+    />
 
-    {/* Navigation & Submit */}
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
-      <div className="flex gap-3 w-full md:w-auto">
+  <div className="flex items-center gap-2">
+    
+    <button
+            onClick={handleReadQuestion}
+            className="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1 rounded text-xs"
+          >
+            🔊 Read
+          </button>
+          {repeatAvailable && (
+            <button
+              onClick={handleRepeat}
+              className="bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded text-xs"
+            >
+              🔄 Repeat
+            </button>
+          )}
+  </div>
+    <div className="flex items-center justify-between">
+      <div className="space-x-3">
         <Button
           variant="outline"
           onClick={previousQ}
           disabled={index === 0}
-          className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
+          className="px-6 py-2 rounded-lg bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
         >
           Prev
         </Button>
@@ -151,23 +151,22 @@ useEffect(() => {
           variant="secondary"
           onClick={nextQ}
           disabled={index === questions.length - 1}
-          className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
+          className="px-6 py-2 rounded-lg bg-gradient-to-r from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
         >
           Next
         </Button>
       </div>
-
       <Button
         onClick={handleSubmit}
-        disabled={answer.length === 0 && index !== questions.length - 1}
-        className="w-full md:w-auto px-6 py-2 rounded-lg bg-gradient-to-r from-neutral-600 via-neutral-700 to-neutral-600 hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
+        disabled={answer.length === 0 && index !=questions.length - 1}
+        className="px-6 py-2 rounded-lg bg-gradient-to-r from-neutral-600 via-neutral-700 to-neutral-600 cursor-pointer hover:from-zinc-700 hover:to-zinc-600 text-white shadow-md disabled:opacity-40"
       >
         {index === questions.length - 1 ? "Submit Assignment" : "Submit Answer"}
       </Button>
+
     </div>
   </footer>
 </div>
-
 
   );
 }
