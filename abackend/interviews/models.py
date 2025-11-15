@@ -8,6 +8,8 @@ CATEGORY_CHOICES = [
         ("C++", "C++"),
         ("Machine Learning", "Machine Learning"),
         ("Data Science", "Data Science"),
+        ("DSA", "DSA"),
+        ("mis", "mis"),
     ]
 
 class Session(models.Model):
