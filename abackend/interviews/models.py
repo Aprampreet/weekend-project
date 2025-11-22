@@ -10,6 +10,7 @@ CATEGORY_CHOICES = [
         ("Data Science", "Data Science"),
         ("DSA", "DSA"),
         ("mis", "mis"),
+        ("mis2", "mis2"),
     ]
 
 class Session(models.Model):
